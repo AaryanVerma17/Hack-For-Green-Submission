@@ -1,5 +1,7 @@
 from __future__ import annotations
-
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 """Enhanced Streamlit dashboard with real-time fraud detection visualizations.
 
 Features:
@@ -9,10 +11,7 @@ Features:
 """
 
 import os
-import sys
-import json
 import csv
-from pathlib import Path
 
 import pandas as pd
 import plotly.graph_objects as go
@@ -31,19 +30,6 @@ os.makedirs("logs", exist_ok=True)
 # Set Streamlit page config
 st.set_page_config(page_title="Fraud AI Assistant", layout="wide", page_icon="🛡️")
 st.title("🛡️ Real-Time Financial Fraud Detection + AI Risk Assistant")
-
-# Auto-refresh every 2 seconds
-st_autorefresh(interval=2000, key="auto-refresh")
-st.markdown(
-    """
-    <style>
-    [data-testid="stMetricValue"] {
-        font-size: 32px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
 
 # File paths
 transactions_path = Path(STREAM_FILE_PATH)
