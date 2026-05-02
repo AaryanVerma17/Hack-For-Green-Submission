@@ -1,3 +1,4 @@
+from __future__ import annotations
 """Enhanced Streamlit dashboard with real-time fraud detection visualizations.
 
 Features:
@@ -14,8 +15,6 @@ os.makedirs("logs", exist_ok=True)
 
 port = int(os.environ.get("PORT", 8501))
 # ...existing code...
-
-from __future__ import annotations
 
 import json
 import sys
