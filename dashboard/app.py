@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 """Enhanced Streamlit dashboard with real-time fraud detection visualizations.
 
 Features:
@@ -6,41 +7,33 @@ Features:
 2. Risk Score Breakdown Table (Feature Triggers)
 3. Real-Time Fraud Trend Graph (Time Series)
 """
+
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
-os.makedirs("data", exist_ok=True)
-os.makedirs("logs", exist_ok=True)
-
-port = int(os.environ.get("PORT", 8501))
-# ...existing code...
-
-import json
 import sys
+import json
+import csv
 from pathlib import Path
 
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 import streamlit as st
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
-# ...existing code...
+from dotenv import load_dotenv
 from streamlit_autorefresh import st_autorefresh
-
-st_autorefresh(interval=2000, key="auto-refresh")
-# ...existing code...
 
 from config.settings import ALERTS_OUTPUT_PATH, STREAM_FILE_PATH
 
+# Load environment variables and ensure directories exist
+load_dotenv()
+os.makedirs("data", exist_ok=True)
+os.makedirs("logs", exist_ok=True)
+
+# Set Streamlit page config
 st.set_page_config(page_title="Fraud AI Assistant", layout="wide", page_icon="🛡️")
 st.title("🛡️ Real-Time Financial Fraud Detection + AI Risk Assistant")
 
 # Auto-refresh every 2 seconds
+st_autorefresh(interval=2000, key="auto-refresh")
 st.markdown(
     """
     <style>
@@ -58,8 +51,41 @@ alerts_path = Path("data/alerts.csv")
 scored_path = Path("data/scored_transactions.csv")
 
 # ============================================================================
+# SECTION: Add Transaction Form
+# ============================================================================
+st.divider()
+st.subheader("📝 Add a New Transaction")
+
+with st.form("add_transaction"):
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        user_id = st.text_input("User ID", value="u_001")
+        amount = st.number_input("Amount", min_value=0.01, value=100.0)
+        currency = st.text_input("Currency", value="USD")
+    with col2:
+        location = st.text_input("Location", value="US")
+        merchant = st.text_input("Merchant", value="grocery")
+    with col3:
+        transaction_id = st.text_input("Transaction ID", value=f"txn_{pd.Timestamp.now().strftime('%Y%m%d%H%M%S')}")
+        timestamp = st.text_input("Timestamp (ISO)", value=pd.Timestamp.now().isoformat(timespec="seconds"))
+
+    submitted = st.form_submit_button("Add Transaction")
+    if submitted:
+        # Ensure file exists and has header
+        if not transactions_path.exists() or transactions_path.stat().st_size == 0:
+            with transactions_path.open("w", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+                writer.writerow(["transaction_id", "user_id", "amount", "currency", "location", "merchant", "timestamp"])
+        # Append the transaction
+        with transactions_path.open("a", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow([transaction_id, user_id, amount, currency, location, merchant, timestamp])
+        st.success("Transaction added! It will be processed in a few seconds.")
+
+# ============================================================================
 # SECTION 1: KEY METRICS
 # ============================================================================
+st.divider()
 st.subheader("📊 Key Metrics")
 
 col1, col2, col3, col4 = st.columns(4)
