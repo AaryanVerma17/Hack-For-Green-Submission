@@ -2,6 +2,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
+from streamlit_autorefresh import st_autorefresh
+st_autorefresh(interval=2000, key="auto-refresh")
 """Enhanced Streamlit dashboard with real-time fraud detection visualizations.
 
 Features:
@@ -15,11 +17,8 @@ import csv
 
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.express as px
 import streamlit as st
 from dotenv import load_dotenv
-from streamlit_autorefresh import st_autorefresh
-
 from config.settings import ALERTS_OUTPUT_PATH, STREAM_FILE_PATH
 
 # Load environment variables and ensure directories exist
@@ -359,15 +358,3 @@ st.markdown("🔄 *Dashboard auto-refreshes every 2 seconds*")
 # Add refresh button
 if st.button("🔄 Refresh Now"):
     st.rerun()
-
-# Auto-refresh configuration
-st.markdown(
-    """
-    <script>
-    setTimeout(function() {
-        window.location.reload();
-    }, 2000);
-    </script>
-    """,
-    unsafe_allow_html=True
-)
