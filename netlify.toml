@@ -1,4 +1,0 @@
-[build]
-base = "Client"  # Tells Netlify to use this as working directory
-command = "npm install --legacy-peer-deps && npm run build"
-publish = "build"  # Relative to base directory

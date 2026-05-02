@@ -2,6 +2,12 @@
 
 Uses Pathway's CSV connector in streaming mode for automatic data updates.
 """
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+os.makedirs("data", exist_ok=True)
+os.makedirs("logs", exist_ok=True)
 
 from __future__ import annotations
 

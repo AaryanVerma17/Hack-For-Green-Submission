@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 """Quick test to demonstrate all features are working."""
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+os.makedirs("data", exist_ok=True)
+os.makedirs("logs", exist_ok=True)
 
 import pandas as pd
 import json

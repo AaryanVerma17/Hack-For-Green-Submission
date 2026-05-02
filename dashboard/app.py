@@ -5,6 +5,15 @@ Features:
 2. Risk Score Breakdown Table (Feature Triggers)
 3. Real-Time Fraud Trend Graph (Time Series)
 """
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+os.makedirs("data", exist_ok=True)
+os.makedirs("logs", exist_ok=True)
+
+port = int(os.environ.get("PORT", 8501))
+# ...existing code...
 
 from __future__ import annotations
 
@@ -20,6 +29,12 @@ import streamlit as st
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+
+# ...existing code...
+from streamlit_autorefresh import st_autorefresh
+
+st_autorefresh(interval=2000, key="auto-refresh")
+# ...existing code...
 
 from config.settings import ALERTS_OUTPUT_PATH, STREAM_FILE_PATH
 
