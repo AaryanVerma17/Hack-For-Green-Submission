@@ -2,7 +2,7 @@ services:
   - type: web
     name: fraud-dashboard
     env: python
-    runtime : python3.12
+    runtime : python3.10
     buildCommand: pip install -r requirements.txt
     startCommand: streamlit run dashboard/app.py --server.port $PORT
     envVars:
