@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from streamlit_autorefresh import st_autorefresh
-st_autorefresh(interval=2000, key="auto-refresh")
+st_autorefresh(interval=20000, key="auto-refresh")
 """Enhanced Streamlit dashboard with real-time fraud detection visualizations.
 
 Features:
@@ -353,7 +353,7 @@ else:
 
 # Auto-refresh
 st.markdown("---")
-st.markdown("🔄 *Dashboard auto-refreshes every 2 seconds*")
+st.markdown("🔄 *Dashboard auto-refreshes every 2 minutes*")
 
 # Add refresh button
 if st.button("🔄 Refresh Now"):
