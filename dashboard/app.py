@@ -38,9 +38,6 @@ scored_path = Path("data/scored_transactions.csv")
 # ============================================================================
 # SECTION: Add Transaction Form
 # ============================================================================
-st.divider()
-st.subheader("📝 Add a New Transaction")
-
 with st.form("add_transaction"):
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -56,17 +53,20 @@ with st.form("add_transaction"):
 
     submitted = st.form_submit_button("Add Transaction")
     if submitted:
+        import csv
+        from pathlib import Path
+        tx_file = Path("data/transactions.csv")
         # Ensure file exists and has header
-        if not transactions_path.exists() or transactions_path.stat().st_size == 0:
-            with transactions_path.open("w", newline="", encoding="utf-8") as f:
+        if not tx_file.exists() or tx_file.stat().st_size == 0:
+            with tx_file.open("w", newline="", encoding="utf-8") as f:
                 writer = csv.writer(f)
                 writer.writerow(["transaction_id", "user_id", "amount", "currency", "location", "merchant", "timestamp"])
         # Append the transaction
-        with transactions_path.open("a", newline="", encoding="utf-8") as f:
+        with tx_file.open("a", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
             writer.writerow([transaction_id, user_id, amount, currency, location, merchant, timestamp])
         st.success("Transaction added! It will be processed in a few seconds.")
-
+        st.experimental_rerun()  # <--- This line forces the dashboard to reload
 # ============================================================================
 # SECTION 1: KEY METRICS
 # ============================================================================
