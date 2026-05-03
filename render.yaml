@@ -2,9 +2,18 @@ services:
   - type: web
     name: fraud-dashboard
     env: python
-    runtime : python3.12
     buildCommand: pip install -r requirements.txt
     startCommand: streamlit run dashboard/app.py --server.port $PORT --server.address 0.0.0.0
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+    plan: free
+
+  - type: worker
+    name: fraud-pipeline
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python pipeline/main_pipeline.py
     envVars:
       - key: OPENAI_API_KEY
         sync: false
