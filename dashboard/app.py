@@ -66,7 +66,7 @@ with st.form("add_transaction"):
             writer = csv.writer(f)
             writer.writerow([transaction_id, user_id, amount, currency, location, merchant, timestamp])
         st.success("Transaction added! It will be processed in a few seconds.")
-        st.experimental_rerun()  # <--- This line forces the dashboard to reload
+        st.rerun()  # <--- This line forces the dashboard to reload
 # ============================================================================
 # SECTION 1: KEY METRICS
 # ============================================================================
